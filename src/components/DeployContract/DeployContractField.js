@@ -1,6 +1,7 @@
 import { DatePicker, Form, Icon, Input, InputNumber, Select, Popover } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import 'whatwg-fetch';
 
 import OracleDataSources, { getDataSourceObj } from '../TestQuery/OracleDataSources';
 
@@ -271,5 +272,56 @@ function DeployContractField(props) {
   );
 }
 
+class SelectTokenField extends React.Component {
+
+  constructor() {
+    super();
+    this.state = { pairs: [] };
+  }
+
+  componentDidMount() {
+    const binanceInfoUrl = "http://128.199.206.130/api/v1/exchangeInfo";
+    fetch(binanceInfoUrl).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return json.symbols.filter(symbol => symbol.quoteAsset === "ETH");
+    }).then(response => this.setState({ pairs: response })
+    ).catch(err => {});;
+  }
+
+  render() {
+    const { name, form, initialValue, showHint } = this.props;
+    const { getFieldDecorator } = form;
+    const fieldSettings = {
+      label: 'Select ETH based pair',
+      extra: 'Available ETH based pairs from Binance',
+    };
+
+    const rules = [
+      {
+        required: true, message: 'Please select a token pairs',
+      }
+    ];
+    const label = (<span>{fieldSettings.label} {showHint && <Hint hint={fieldSettings.extra} hintTitle={fieldSettings.label} />}</span>);
+    return (
+      <FormItem
+        label={label}
+      >
+
+        {getFieldDecorator(name, {
+          initialValue,
+          rules,
+        })(
+          <Select>
+            {this.state.pairs.map(symbol =>
+              <Option key={symbol.symbol} value={symbol.symbol}>{symbol.baseAsset} / {symbol.quoteAsset}</Option>)}
+          </Select>
+        )}
+      </FormItem>
+    );
+  }
+}
+
+export { SelectTokenField };
 export const FieldSettings = fieldSettingsByName;
 export default DeployContractField;

@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import Loader from '../Loader';
-import Field, { FieldSettings } from './DeployContractField';
+import Field, { SelectTokenField, FieldSettings } from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
 
 const ButtonGroup = Button.Group;
@@ -339,4 +339,33 @@ class DeployStep extends BaseStepComponent {
   }
 }
 
-export {NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep};
+/**
+ * Step to select the token using drop down menus 
+ *
+ */
+class SelectTokenStep extends BaseStepComponent {
+
+  render() {
+    return (<div>
+      <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
+        <h1>Select ETH based pair</h1>
+        <div>
+          Available ETH based pairs from Binance
+        </div>
+        <br />
+        <SelectTokenField name='tokenPair'
+          form={this.props.form} />
+
+        <Row type="flex" justify="end">
+          <Col>
+            <BiDirectionalNav text="Select Oracle" {...this.props} />
+          </Col>
+        </Row>
+      </Form>
+    </div>);
+  }
+}
+
+SelectTokenStep = Form.create()(SelectTokenStep);
+
+export {NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep, SelectTokenStep};

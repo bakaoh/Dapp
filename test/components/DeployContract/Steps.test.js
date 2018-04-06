@@ -11,8 +11,13 @@ import {
   PricingStep,
   ExpirationStep,
   DataSourceStep,
-  DeployStep
+  DeployStep,
+  SelectTokenStep
 } from '../../../src/components/DeployContract/Steps';
+
+import {
+  SelectTokenField
+} from '../../../src/components/DeployContract/DeployContractField';
 
 describe('NameContractStep', () => {
   let nameContractStep;
@@ -177,5 +182,25 @@ describe('DeployStep', () => {
       address: '0x00000'
     } });
     expect(successMessageSpy).to.have.property('callCount', 1);
+  });
+});
+
+describe('SelectTokenStep', () => {
+  let selectTokenStep;
+  beforeEach(() => {
+    selectTokenStep = mount(<SelectTokenStep />);
+  });
+
+  it('renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<SelectTokenStep />, div);
+  });
+
+  it('should display a drop down menu to select token pair', () => {
+    expect(selectTokenStep.find(SelectTokenField)).to.have.length(1);
+  });
+
+  it('should have a prev and next button', () => {
+    expect(selectTokenStep.find(Button)).to.have.length(2);
   });
 });
