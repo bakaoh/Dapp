@@ -8,7 +8,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import Loader from '../Loader';
-import Field, { SelectTokenField, FieldSettings } from './DeployContractField';
+import Field, { FieldSettings } from './DeployContractField';
+import SelectTokenField from './SelectTokenField';
 import DeployContractSuccess from './DeployContractSuccess';
 
 const ButtonGroup = Button.Group;

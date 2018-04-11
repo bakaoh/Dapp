@@ -15,9 +15,7 @@ import {
   SelectTokenStep
 } from '../../../src/components/DeployContract/Steps';
 
-import {
-  SelectTokenField
-} from '../../../src/components/DeployContract/DeployContractField';
+import SelectTokenField from '../../../src/components/DeployContract/SelectTokenField';
 
 describe('NameContractStep', () => {
   let nameContractStep;
