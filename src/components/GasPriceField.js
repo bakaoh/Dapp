@@ -71,13 +71,13 @@ class GasPriceField extends Component {
       : time >= 0
         ? `The following MetaMask settings should give a ${time} min confirmation for ${cost} ETH`
         : `The gas price is below the market low safe price (currently about ${condition.safeLow /
-            10} gwei), your transaction might take forever to get confirmed`;
+        10} gwei), your transaction might take forever to get confirmed`;
     return message;
   }
 
   componentDidMount() {
     const gasInfoUrl = 'https://ethgasstation.info/json/ethgasAPI.json';
-    Rx.Observable.ajax({
+    this.subscription = Rx.Observable.ajax({
       url: gasInfoUrl,
       method: 'GET',
       responseType: 'json',
@@ -85,6 +85,10 @@ class GasPriceField extends Component {
     })
       .map(data => data.response)
       .subscribe(this.updateNetworkCondition);
+  }
+
+  componentWillUnmount() {
+    this.subscription.unsubscribe();
   }
 
   render() {
@@ -143,24 +147,24 @@ class GasPriceField extends Component {
               >
                 {this.props.form ? (
                   this.props.form.getFieldDecorator('gasPrice', {
-                    initialValue: 2
+                    initialValue: this.state.gasprice
                   })(
                     <Input
                       type="number"
-                      min="0"
+                      min={0}
                       onChange={this.onInputChange.bind(this)}
                       placeholder="Gas Price (gwei)"
                     />
                   )
                 ) : (
-                  <Input
-                    type="number"
-                    min="0"
-                    onChange={this.onInputChange.bind(this)}
-                    placeholder="Gas Price (gwei)"
-                    value={this.state.gasprice}
-                  />
-                )}
+                    <Input
+                      type="number"
+                      min={0}
+                      onChange={this.onInputChange.bind(this)}
+                      placeholder="Gas Price (gwei)"
+                      value={this.state.gasprice}
+                    />
+                  )}
               </FormItem>
             </Col>
           </Row>
